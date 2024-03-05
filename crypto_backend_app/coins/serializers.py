@@ -7,3 +7,4 @@ class CoinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coin,
         fields = '__all__'
+

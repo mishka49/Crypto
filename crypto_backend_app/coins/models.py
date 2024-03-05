@@ -6,9 +6,9 @@ class Coin(models.Model):
     name = models.CharField(max_length=30)
     rank = models.IntegerField()
     price_usd = models.CharField(max_length=20)
-    percent_change_24h = models.FloatField()
-    percent_change_1h = models.FloatField()
-    percent_change_7d = models.FloatField()
+    percent_change_24h = models.CharField(max_length=20)
+    percent_change_1h = models.CharField(max_length=20)
+    percent_change_7d = models.CharField(max_length=20)
     market_cap_usd = models.CharField(max_length=40)
 
 class CoinData(models.Model):

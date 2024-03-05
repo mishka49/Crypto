@@ -1,2 +1,0 @@
-class CoinRepositories:
-    pass
