@@ -37,10 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'channels',
 
     'coins',
-    'updater',
+    'data_streaming',
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)]
+        },
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +81,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'crypto_backend_app.wsgi.application'
+# WSGI_APPLICATION = 'crypto_backend_app.wsgi.application'
+ASGI_APPLICATION = 'crypto_backend_app.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -93,7 +104,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
