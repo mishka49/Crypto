@@ -2,9 +2,79 @@
 {% load static %}
 
 {% block scripts %}
-    <script src="{% static 'data_streaming/dashboard.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block content %}
-hellow world
+    {{ room_name|json_script:"room-name" }}
+
+    <canvas id="priceChart" width="500" height="200"></canvas>
+
+    <script>
+        // Ваши данные о цене и времени (замените этими данными)
+        const timeLabels = [];
+        const priceData = [];
+
+        // Создание графика
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'Цена',
+                    data: priceData,
+                    borderColor: 'red',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true, // Enable responsiveness
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        let options = {
+            era: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            timezone: 'UTC',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+
+        function updatePrice(price) {
+            let nowdate = new Date().toLocaleString()
+            timeLabels.push(nowdate)
+            priceData.push(price)
+            priceChart.update()
+
+        }
+    </script>
+
+    <script>
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const message = JSON.parse(data.message)
+            console.log(message.data.k.c)
+            updatePrice(message.data.k.c)
+        };
+    </script>
 {% endblock content %}

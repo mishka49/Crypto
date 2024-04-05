@@ -9,5 +9,5 @@ def main(request):
     return render(request, 'data_streaming/main.html', {'coins': coins})
 
 
-def dashboard(request, slug):
-    return render(request, 'data_streaming/dashboard.html', {})
+def dashboard(request, room_name):
+    return render(request, 'data_streaming/dashboard.html', {'room_name': room_name})

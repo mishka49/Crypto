@@ -11,6 +11,7 @@ class Coin(models.Model):
     percent_change_7d = models.CharField(max_length=20)
     market_cap_usd = models.CharField(max_length=40)
 
+
 class CoinData(models.Model):
     coin = models.ForeignKey('Coin', on_delete=models.CASCADE)
     price_usd = models.CharField(max_length=20)

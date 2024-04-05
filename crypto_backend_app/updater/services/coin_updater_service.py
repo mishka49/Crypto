@@ -1,5 +1,0 @@
-
-class CoinsUpdater:
-    pass
-
-

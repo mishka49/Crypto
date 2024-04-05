@@ -1,26 +1,25 @@
+from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import async_to_sync
 import json
 
-from channels.generic.websocket import AsyncWebsocketConsumer
+import websocket
+from updater.services import CoinDataStreamer
 
 
-class DashBoardConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        print('connection')
-        await self.accept()
+class DashboardConsumer(WebsocketConsumer):
+    def connect(self):
+        self.accept()
+        self.coin_data_streamer = CoinDataStreamer('BTCUSDT', handler=self._handler)
+        self.coin_data_streamer.start()
 
-    async def disconnect(self, close_code):
-        print(f'connection closed with code: {close_code}')
+    def _handler(self, mw, message):
+        self.send(text_data=json.dumps({'message': message}))
 
-    async def receive(self, text_data):
-        test_data_json = json.loads(text_data)
-        message = test_data_json["message"]
-        sender = test_data_json["sender"]
+    def disconnect(self, close_code):
+        self.coin_data_streamer.stop_websocket()
 
-        print(message, sender)
+    def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
 
-        await self.send(text_data=json.dumps(
-            {
-                'message': message,
-                'sender': sender,
-            }
-        ))
+        self.send(text_data=json.dumps({"message": message}))

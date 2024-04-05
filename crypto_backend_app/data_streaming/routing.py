@@ -1,7 +1,7 @@
-from django.urls import path
-from .consumers import DashBoardConsumer
+from django.urls import re_path
+
+from . import consumers
 
 websocket_urlpatterns = [
-    path('ws/<str:dashboard_slug>/', DashBoardConsumer.as_asgi()),
-
+    re_path(r"ws/chat/(?P<room_name>\w+)/$", consumers.DashboardConsumer.as_asgi()),
 ]

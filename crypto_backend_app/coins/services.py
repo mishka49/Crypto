@@ -1,5 +1,7 @@
-class Coin:
-    @staticmethod
-    def update():
-        pass
+import requests
+
+from coins.serializers import CoinSerializer
+from .models import Coin
+
+
 
